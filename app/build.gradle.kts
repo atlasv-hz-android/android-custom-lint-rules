@@ -29,5 +29,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":library"))
+//    implementation(project(":library"))
+    lintChecks(libs.checks)
 }

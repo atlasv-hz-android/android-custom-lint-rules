@@ -6,3 +6,8 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.lint) apply false
 }
+buildscript {
+    dependencies {
+        classpath(libs.publishlib)
+    }
+}

@@ -1,18 +1,21 @@
 [versions]
 agp = "8.4.1"
+checks = "1.0.0-alpha01"
 lint = '31.4.1' # = agp + 23.0.0
 kotlin = '1.9.23'
 junit = '4.13.2'
-
+publishlib = "2.4.0"
 
 [libraries]
 # For a description of the below dependencies, see the main project README
+checks = { module = "com.android.now.lint:checks", version.ref = "checks" }
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
 lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "lint" }
 lint-cli = { group = "com.android.tools.lint", name = "lint", version.ref = "lint" }
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "lint" }
 junit = { group = "junit", name = "junit", version.ref  = "junit" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+publishlib = { module = "com.android.now.plugin:publishlib", version.ref = "publishlib" }
 
 [bundles]
 lint-api = [
