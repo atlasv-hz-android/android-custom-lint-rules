@@ -31,4 +31,6 @@ android {
 dependencies {
 //    implementation(project(":library"))
     lintChecks(libs.checks)
+//    lintChecks(project(":checks"))
+    implementation(libs.kotlinx.serialization)
 }

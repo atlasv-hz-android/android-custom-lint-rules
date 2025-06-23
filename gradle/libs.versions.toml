@@ -1,11 +1,12 @@
 [versions]
 agp = "8.10.1"
-checks = "1.1.0-alpha01"
+checks = "1.2.0-alpha01"
 lint = '31.10.1' # = agp + 23.0.0
 kotlin = '2.1.21'
 junit = '4.13.2'
 publishlib = "2.4.0"
 versionsCheck = "0.51.0"
+kotlinSerialization = "1.8.1"
 
 [libraries]
 # For a description of the below dependencies, see the main project README
@@ -17,6 +18,7 @@ lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.re
 junit = { group = "junit", name = "junit", version.ref  = "junit" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 publishlib = { module = "com.android.now.plugin:publishlib", version.ref = "publishlib" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 
 [bundles]
 lint-api = [
