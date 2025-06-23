@@ -1,10 +1,11 @@
 [versions]
-agp = "8.4.1"
-checks = "1.0.0-alpha01"
-lint = '31.4.1' # = agp + 23.0.0
-kotlin = '1.9.23'
+agp = "8.10.1"
+checks = "1.1.0-alpha01"
+lint = '31.10.1' # = agp + 23.0.0
+kotlin = '2.1.21'
 junit = '4.13.2'
 publishlib = "2.4.0"
+versionsCheck = "0.51.0"
 
 [libraries]
 # For a description of the below dependencies, see the main project README
@@ -37,4 +38,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+versionscheck = { id = "com.github.ben-manes.versions", version.ref = "versionsCheck" }
 
