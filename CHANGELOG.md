@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/atlasv-hz-android/android-custom-lint-rules/compare/v1.1.0...v1.2.0) (2025-06-23)
+
+
+### Features
+
+* 增加Json @Serializable检测 ([24d0b1d](https://github.com/atlasv-hz-android/android-custom-lint-rules/commit/24d0b1d77f79ff3988761af3166097210c0e38e3))
+
 ## [1.1.0](https://github.com/atlasv-hz-android/android-custom-lint-rules/compare/v1.0.0...v1.1.0) (2025-06-23)
 
 
