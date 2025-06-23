@@ -1,0 +1,99 @@
+name: release-please
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+
+permissions:
+  issues: write # This is important for label creation
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    env:
+      GPR_USR: ${{ secrets.GPR_USR }}
+      GPR_KEY: ${{ secrets.GPR_KEY }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      # https://github.com/googleapis/release-please-action
+      - uses: googleapis/release-please-action@v4.2.0
+        id: release
+        with:
+          release-type: simple
+        if: ${{ github.event.head_commit.message != 'Initial commit' }}
+
+      # https://github.com/actions/setup-java
+      - uses: actions/setup-java@v4.7.1
+        with:
+          distribution: 'oracle' # See 'Supported distributions' for available options
+          java-version: '17'
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      - name: Check Java version
+        run: java -version
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      - name: Cache gradle
+        # https://github.com/actions/cache
+        uses: actions/cache@v4.2.3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      - run: echo ${{ steps.release.outputs.tag_name }} > lib_version.txt
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      - run: ./gradlew publish
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      - name: Get Release Description
+        id: get_description # 给这个步骤一个ID，方便引用
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }} # 获取触发事件的Release标签
+        run: |
+          # 获取 Release 的描述内容
+          CHANGELOG_TEXT=$(gh release view "${RELEASE_TAG}" --json body --jq '.body')
+          # 把换行符换成\n两个字符
+          CHANGELOG_TEXT=$(echo "$CHANGELOG_TEXT" | perl -pe 's/\n/\\n/g')
+          echo "changelog_text<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG_TEXT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+
+      - name: Use Changelog in a later step
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
+        run: |
+          echo "本次发布的完整 Changelog:"
+          echo "${{ steps.get_description.outputs.changelog_text }}"
+        
+      - name: Send pr notification
+        run: |
+          curl -XPOST \
+          -H "Content-Type:application/json" \
+          https://android-hz-platform.etm.tech/notification/send_lib_pr_notification \
+          -d '{"repository":"${{ github.repository }}"}'
+        if: ${{ steps.release.outputs.release_created == false && github.event.head_commit.message != 'Initial commit' }}
+
+      - name: Send release notification
+        run: |
+          curl -XPOST \
+          -H "Content-Type:application/json" \
+          https://android-hz-platform.etm.tech/notification/send_lib_release_notification \
+          -d '{"changelog":"${{ steps.get_description.outputs.changelog_text }}","repository":"${{ github.repository }}"}'
+        if: ${{ steps.release.outputs.release_created && github.event.head_commit.message != 'Initial commit' }}
