@@ -1,0 +1,63 @@
+name: Sonar
+
+on:
+  push:
+#    For libs
+    branches:
+      - main
+
+#    For apps
+#    paths:
+#      - 'app_version.properties'
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    env:
+      GPR_USR: ${{ secrets.GPR_USR }}
+      GPR_KEY: ${{ secrets.GPR_KEY }}
+      COLLART_FACEID_AWS_KEY: ${{ secrets.COLLART_FACEID_AWS_KEY }}
+      COLLART_FACEID_AWS_SECRET_KEY: ${{ secrets.COLLART_FACEID_AWS_SECRET_KEY }}
+      COLLART_FUNCTION_ACCESS_SECRET: ${{ secrets.COLLART_FUNCTION_ACCESS_SECRET }}
+      KS_ALIAS_COLLART: ${{ secrets.KS_ALIAS_COLLART }}
+      KS_PWD_COLLART: ${{ secrets.KS_PWD_COLLART }}
+      ROOM_ID: "oc_15d4c093ae68c18e2aaa4dcfa5f03a31"
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+      # https://github.com/actions/setup-java
+        uses: actions/setup-java@v4.7.1
+        with:
+          java-version: 17
+          distribution: 'zulu' # Alternative distribution options are available.
+      - name: Cache SonarQube packages
+        # https://github.com/actions/cache
+        uses: actions/cache@v4.2.3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        # https://github.com/actions/cache
+        uses: actions/cache@v4.2.3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          ./gradlew lint
+          ./gradlew sonar
+
+      - name: Send finish notification
+        run: |
+          curl -XPOST \
+          -H "Content-Type:application/json" \
+          https://android-hz-platform.etm.tech/notification/send_common_message \
+          -d '{"receive_id":"${{ env.ROOM_ID }}", "receive_id_type":"chat_id", "title":"SonarQube扫描完成","message":"${{ github.repository }}扫描完成，[点击查看](https://android-team-sonar.etm.tech/projects)"}'
