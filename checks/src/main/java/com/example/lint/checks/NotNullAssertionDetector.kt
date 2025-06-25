@@ -68,7 +68,7 @@ class NotNullAssertionDetector : Detector(), SourceCodeScanner {
           val sourcePsi = node.operand.sourcePsi
           if (sourcePsi is KtExpression) {
             analyze(sourcePsi) {
-              val type = sourcePsi.getKtType()
+              val type = sourcePsi.expressionType
               if (type != null && !type.canBeNull) {
                 message += " -- it's not even needed here"
               }
