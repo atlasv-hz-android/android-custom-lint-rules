@@ -1,12 +1,13 @@
 [versions]
 agp = "8.10.1"
-checks = "1.2.0-alpha01"
+checks = "1.2.0"
 lint = '31.10.1' # = agp + 23.0.0
 kotlin = '2.1.21'
 junit = '4.13.2'
 publishlib = "2.4.0"
 versionsCheck = "0.51.0"
 kotlinSerialization = "1.8.1"
+sonarqube = "6.2.0.5505"
 
 [libraries]
 # For a description of the below dependencies, see the main project README
