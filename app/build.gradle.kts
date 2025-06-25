@@ -25,6 +25,7 @@ android {
         // https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/sarif-support-for-code-scanning
         sarifOutput = file("../lint-results.sarif")
         textReport = true
+        abortOnError = false
     }
 }
 

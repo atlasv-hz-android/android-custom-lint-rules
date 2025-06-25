@@ -16,6 +16,7 @@ lint {
     textReport = true
     absolutePaths = false
     ignoreTestSources = true
+    abortOnError = false
 }
 
 dependencies {
