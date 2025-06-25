@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/atlasv-hz-android/android-custom-lint-rules/compare/v1.2.0...v1.3.0) (2025-06-25)
+
+
+### Features
+
+* Config sonar ([559a96e](https://github.com/atlasv-hz-android/android-custom-lint-rules/commit/559a96e71a8dbed8e1259adb6ebb81884b0bbc21))
+
 ## [1.2.0](https://github.com/atlasv-hz-android/android-custom-lint-rules/compare/v1.1.0...v1.2.0) (2025-06-23)
 
 
