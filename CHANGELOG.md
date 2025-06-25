@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/atlasv-hz-android/android-custom-lint-rules/compare/v1.3.0...v1.4.0) (2025-06-25)
+
+
+### Features
+
+* Config SonarQube workflow ([d5f708f](https://github.com/atlasv-hz-android/android-custom-lint-rules/commit/d5f708f3cd08fe958ee49a438c1d378762c8237f))
+
 ## [1.3.0](https://github.com/atlasv-hz-android/android-custom-lint-rules/compare/v1.2.0...v1.3.0) (2025-06-25)
 
 
